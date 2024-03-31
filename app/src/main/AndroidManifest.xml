@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="sh.tablet.recorderhook">
+
+    <application
+        android:allowBackup="true"
+        android:label="AudioPlaybackCapture permission hooker"
+        android:supportsRtl="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        tools:targetApi="31"
+        android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="allows audio playback capture in ALL apps. userful for screen recording." />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="53" />
+    </application>
+
+</manifest>

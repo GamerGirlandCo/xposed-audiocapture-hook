@@ -1,0 +1,36 @@
+package sh.tablet.recorderhook
+
+import io.github.libxposed.api.XposedInterface
+import io.github.libxposed.api.XposedInterface.BeforeHookCallback
+import io.github.libxposed.api.XposedModule
+import io.github.libxposed.api.XposedModuleInterface
+import io.github.libxposed.api.XposedModuleInterface.ModuleLoadedParam
+import io.github.libxposed.api.annotations.BeforeInvocation
+import io.github.libxposed.api.annotations.XposedHooker
+
+private lateinit var module: ModuleMainOld
+
+class ModuleMainOld(base: XposedInterface, param: ModuleLoadedParam) : XposedModule(base, param) {
+    init {
+        log("Main module @ " + param.processName)
+        module = this
+    }
+    @XposedHooker
+    class PermHooker() : XposedInterface.Hooker {
+        companion object {
+            @JvmStatic
+            @BeforeInvocation
+            fun beforeInvocation(cb: BeforeHookCallback) {
+                cb.returnAndSkip(true)
+            }
+        }
+    }
+    override fun onPackageLoaded(param: XposedModuleInterface.PackageLoadedParam) {
+        super.onPackageLoaded(param)
+        if(param.packageName != "android") return
+        val apc = Class.forName("com.android.server.pm.parsing.pkg.PackageImpl")::class.java.getDeclaredMethod("isAllowAudioPlaybackCapture")
+        hook(apc, PermHooker::class.java)
+//        var m = TypedArray::class.java.getDeclaredMethod("getBoolean", Int::class.java, Boolean::class.java)
+
+    }
+}
